@@ -33,19 +33,27 @@ model Generasi {
 model Users {
   id String @id @default(uuid())
 
-  email        String    @unique
+  email        String        @unique
   password     String
-  role         Role      @default(Anggota)
+  role         Role          @default(Anggota)
   name         String
-  generasi     Generasi? @relation(fields: [generasiName], references: [name])
+  generasi     Generasi?     @relation(fields: [generasiName], references: [name])
   generasiName Int?
   kepengurusan String?
-  image        String?
+  image        Profile_pics?
 
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   articles  Articles[]
   Courses   Courses[]
+}
+
+model Profile_pics {
+  id Int @id @default(autoincrement())
+
+  path    String  @unique
+  Users   Users?  @relation(fields: [usersId], references: [id])
+  usersId String? @unique
 }
 
 model Categories {
