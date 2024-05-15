@@ -33,12 +33,12 @@ model Generasi {
 model Users {
   id String @id @default(uuid())
 
-  email        String   @unique
+  email        String    @unique
   password     String
-  role         Role     @default(Anggota)
+  role         Role      @default(Anggota)
   name         String
-  generasi     Generasi @relation(fields: [generasiName], references: [name])
-  generasiName Int
+  generasi     Generasi? @relation(fields: [generasiName], references: [name])
+  generasiName Int?
   kepengurusan String?
   image        String?
 
