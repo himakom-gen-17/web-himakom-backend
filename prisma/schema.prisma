@@ -33,14 +33,15 @@ model Generasi {
 model Users {
   id String @id @default(uuid())
 
-  email        String        @unique
-  password     String
-  role         Role          @default(Anggota)
-  name         String
-  generasi     Generasi?     @relation(fields: [generasiName], references: [name])
-  generasiName Int?
-  kepengurusan String?
-  image        Profile_pics?
+  email          String        @unique
+  password       String
+  role           Role          @default(Anggota)
+  name           String
+  generasi       Generasi?     @relation(fields: [generasiName], references: [name])
+  generasiName   Int?
+  kepengurusan   String?
+  profilePicture Profile_pics?
+  formalPicture  Formal_pics?
 
   refreshToken String?
 
@@ -51,6 +52,14 @@ model Users {
 }
 
 model Profile_pics {
+  id Int @id @default(autoincrement())
+
+  path    String  @unique
+  Users   Users?  @relation(fields: [usersId], references: [id])
+  usersId String? @unique
+}
+
+model Formal_pics {
   id Int @id @default(autoincrement())
 
   path    String  @unique
