@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, CreateUserDto } from './dto';
-import { AccessTokenGuard } from './guard';
+import { AccessTokenGuard, RefreshTokenGuard } from './guard';
 import { GetUser } from './decorator';
 import { Users } from '@prisma/client';
 
@@ -20,5 +20,12 @@ export class AuthController {
   @Get('logout')
   signout(@GetUser() user: Users) {
     return this.authService.signout(user.id);
+  }
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@GetUser() user: Users) {
+    const userId = user.id;
+    const refreshToken = user.refreshToken;
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }
