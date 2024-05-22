@@ -21,10 +21,6 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
       secretOrKey: config.get('JWT_ACCESS_SECRET'),
     });
   }
-
-  // validate(payload: JwtPayload) {
-  //   return payload;
-  // }
   async validate(payload: JwtPayload) {
     const user = await this.prisma.users.findUnique({
       where: {
@@ -41,10 +37,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-refresh',
 ) {
-  constructor(
-    config: ConfigService,
-    private prisma: PrismaService,
-  ) {
+  constructor(config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: config.get('JWT_REFRESH_SECRET'),

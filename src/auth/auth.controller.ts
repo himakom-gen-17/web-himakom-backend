@@ -12,7 +12,7 @@ export class AuthController {
   signup(@Body() createUserDto: CreateUserDto) {
     return this.authService.signup(createUserDto);
   }
-  @Post('signin')
+  @Post('login')
   signin(@Body() authDto: AuthDto) {
     return this.authService.signin(authDto);
   }
@@ -23,9 +23,11 @@ export class AuthController {
   }
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  refreshTokens(@GetUser() user: Users) {
-    const userId = user.id;
-    const refreshToken = user.refreshToken;
+  refreshTokens(
+    @GetUser() req: { sub: string; email: string; refreshToken: string },
+  ) {
+    const userId = req.sub;
+    const refreshToken = req.refreshToken;
     return this.authService.refreshTokens(userId, refreshToken);
   }
 }
