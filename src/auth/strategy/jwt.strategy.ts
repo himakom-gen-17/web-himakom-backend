@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 type JwtPayload = {
-  sub: string;
+  id: string;
   email: string;
 };
 
@@ -24,7 +24,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: JwtPayload) {
     const user = await this.prisma.users.findUnique({
       where: {
-        id: payload.sub,
+        id: payload.id,
       },
     });
     delete user.password;
