@@ -68,7 +68,7 @@ export class UsersService {
           ...updateUserDto,
         },
       });
-      delete validateUser.password;
+      delete updatedUser.password;
       return updatedUser;
     } catch (error) {
       throw error;
