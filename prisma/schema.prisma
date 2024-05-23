@@ -17,7 +17,7 @@ model Divisi {
   id Int @id @default(autoincrement())
 
   name        String
-  description String
+  description String?
   articles    Articles[]
 }
 
