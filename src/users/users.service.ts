@@ -4,6 +4,7 @@ import { Users } from '@prisma/client';
 import * as argon from 'argon2';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { prismaExclude } from 'src/prisma/exclude';
 
 @Injectable()
 export class UsersService {
@@ -34,6 +35,7 @@ export class UsersService {
 
   async findAll() {
     return await this.prisma.users.findMany({
+      select: prismaExclude('Users', ['password']),
       orderBy: {
         generasiName: {
           sort: 'desc',
@@ -47,6 +49,7 @@ export class UsersService {
       where: {
         id: id,
       },
+      select: prismaExclude('Users', ['password']),
     });
   }
 
