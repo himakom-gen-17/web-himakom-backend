@@ -7,15 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  Anggota
-  Pengajar
-  Admin
-}
-
 model Divisi {
-  id Int @id @default(autoincrement())
-
+  id          Int        @id @default(autoincrement())
   name        String     @unique
   description String?
   articles    Articles[]
@@ -26,134 +19,115 @@ model Generasi {
   visi  String?
   misi  String?
   image String?
-
-  user Users[]
+  user  Users[]
 }
 
 model Users {
-  id String @id @default(uuid())
-
+  id             String        @id @default(uuid())
   email          String        @unique
   password       String
   role           Role          @default(Anggota)
   name           String
-  generasi       Generasi?     @relation(fields: [generasiName], references: [name])
   generasiName   Int?
   kepengurusan   String?
-  profilePicture Profile_pics?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  refreshToken   String?
+  articles       Articles[]
+  courses        Courses[]
   formalPicture  Formal_pics?
-
-  refreshToken String?
-
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  articles  Articles[]
-  courses   Courses[]
-  socials   Socials[]
+  profilePicture Profile_pics?
+  socials        Socials[]
+  generasi       Generasi?     @relation(fields: [generasiName], references: [name])
 }
 
 model Socials {
-  id Int @id @default(autoincrement())
-
-  type String
-  link String
-
-  user   Users  @relation(fields: [userId], references: [id])
-  userId String
+  id     Int     @id @default(autoincrement())
+  type   String
+  link   String
+  userId String?
+  user   Users?  @relation(fields: [userId], references: [id])
 }
 
 model Profile_pics {
-  id Int @id @default(autoincrement())
-
+  id      Int     @id @default(autoincrement())
   path    String  @unique
-  Users   Users?  @relation(fields: [usersId], references: [id])
   usersId String? @unique
+  Users   Users?  @relation(fields: [usersId], references: [id])
 }
 
 model Formal_pics {
-  id Int @id @default(autoincrement())
-
+  id      Int     @id @default(autoincrement())
   path    String  @unique
-  Users   Users?  @relation(fields: [usersId], references: [id])
   usersId String? @unique
+  Users   Users?  @relation(fields: [usersId], references: [id])
 }
 
 model Categories {
-  id Int @id @default(autoincrement())
-
-  title    String
-  articles Articles[]
+  id       Int        @id @default(autoincrement())
+  name     String
+  articles Articles[] @relation("ArticlesToCategories")
 }
 
 model Articles {
-  id Int @id @default(autoincrement())
-
-  title     String
-  slug      String  @unique
-  thumbnail String?
-  content   String
-  published Boolean @default(false)
-
-  user   Users  @relation(fields: [userId], references: [id])
-  userId String
-
-  categories Categories[]
-  divisi     Divisi       @relation(fields: [divisiId], references: [id])
-  divisiId   Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int          @id @default(autoincrement())
+  title      String
+  slug       String       @unique
+  thumbnail  String?
+  content    String
+  published  Boolean      @default(false)
+  userId     String?
+  divisiId   Int?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  divisi     Divisi?      @relation(fields: [divisiId], references: [id])
+  user       Users?       @relation(fields: [userId], references: [id])
+  categories Categories[] @relation("ArticlesToCategories")
 }
 
 model Albums {
-  id Int @id @default(autoincrement())
-
+  id          Int      @id @default(autoincrement())
   title       String
   description String?
-
-  image Images[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  image       Images[]
 }
 
 model Images {
-  id   Int    @id @default(autoincrement())
-  path String
-
-  album   Albums @relation(fields: [albumId], references: [id])
-  albumId Int
-
+  id        Int      @id @default(autoincrement())
+  path      String
+  albumId   Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  album     Albums?  @relation(fields: [albumId], references: [id])
 }
 
 model Courses {
-  id Int @id @default(autoincrement())
-
+  id          Int        @id @default(autoincrement())
   title       String
   description String
   image       String
-
-  user   Users  @relation(fields: [userId], references: [id])
-  userId String
-
-  episodes Episodes[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userId      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        Users?     @relation(fields: [userId], references: [id])
+  episodes    Episodes[]
 }
 
 model Episodes {
-  id Int @id @default(autoincrement())
-
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   mediaLink   String?
+  courseId    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  course      Courses? @relation(fields: [courseId], references: [id])
+}
 
-  course   Courses @relation(fields: [courseId], references: [id])
-  courseId Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Role {
+  Anggota
+  Pengajar
+  Admin
 }
