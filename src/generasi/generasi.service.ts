@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateGenerasiDto, UpdateGenerasiDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Users } from '@prisma/client';
+import { prismaExclude } from 'src/prisma/exclude';
 
 @Injectable()
 export class GenerasiService {
@@ -23,7 +24,13 @@ export class GenerasiService {
   }
 
   async findAll() {
-    const generasiArr = await this.prisma.generasi.findMany();
+    const generasiArr = await this.prisma.generasi.findMany({
+      include: {
+        user: {
+          select: prismaExclude('Users', ['password', 'refreshToken']),
+        },
+      },
+    });
     return generasiArr;
   }
 
@@ -32,6 +39,11 @@ export class GenerasiService {
       const generasi = await this.prisma.generasi.findUnique({
         where: {
           name: name,
+        },
+        include: {
+          user: {
+            select: prismaExclude('Users', ['password', 'refreshToken']),
+          },
         },
       });
       return generasi;
