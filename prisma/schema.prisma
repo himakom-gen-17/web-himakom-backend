@@ -23,22 +23,22 @@ model Generasi {
 }
 
 model Users {
-  id             String        @id @default(uuid())
-  email          String        @unique
+  id             String     @id @default(uuid())
+  email          String     @unique
   password       String
-  role           Role          @default(Anggota)
+  role           Role       @default(Anggota)
   name           String
   generasiName   Int?
   kepengurusan   String?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   refreshToken   String?
   articles       Articles[]
   courses        Courses[]
-  formalPicture  Formal_pics?
-  profilePicture Profile_pics?
+  formalPicture  String?
+  profilePicture String?
   socials        Socials[]
-  generasi       Generasi?     @relation(fields: [generasiName], references: [name])
+  generasi       Generasi?  @relation(fields: [generasiName], references: [name])
 }
 
 model Socials {
@@ -49,24 +49,10 @@ model Socials {
   user   Users?  @relation(fields: [userId], references: [id])
 }
 
-model Profile_pics {
-  id      Int     @id @default(autoincrement())
-  path    String  @unique
-  usersId String? @unique
-  Users   Users?  @relation(fields: [usersId], references: [id])
-}
-
-model Formal_pics {
-  id      Int     @id @default(autoincrement())
-  path    String  @unique
-  usersId String? @unique
-  Users   Users?  @relation(fields: [usersId], references: [id])
-}
-
 model Categories {
   id       Int        @id @default(autoincrement())
-  name     String
-  articles Articles[] @relation("ArticlesToCategories")
+  name     String     @unique
+  articles Articles[]
 }
 
 model Articles {
@@ -82,7 +68,7 @@ model Articles {
   updatedAt  DateTime     @updatedAt
   divisi     Divisi?      @relation(fields: [divisiId], references: [id])
   user       Users?       @relation(fields: [userId], references: [id])
-  categories Categories[] @relation("ArticlesToCategories")
+  categories Categories[]
 }
 
 model Albums {
