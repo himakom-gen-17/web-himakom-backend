@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GenerasiModule } from './generasi/generasi.module';
 import { DivisiModule } from './divisi/divisi.module';
 import { ArticlesModule } from './articles/articles.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ArticlesModule } from './articles/articles.module';
     GenerasiModule,
     DivisiModule,
     ArticlesModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}
