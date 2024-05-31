@@ -38,5 +38,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "hima-backend"
-          entrypoint: "main"
-          root: "dist"
+          entrypoint: "dist/main"
+          root: "/"
