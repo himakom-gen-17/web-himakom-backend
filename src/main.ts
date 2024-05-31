@@ -13,6 +13,9 @@ async function bootstrap() {
     }),
   );
 
+  // Use `PORT` provided in environment or default to 3000
+  const port = process.env.PORT || 3000;
+
   app.use('/images', express.static('images'));
 
   const config = new DocumentBuilder()
@@ -25,6 +28,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({ origin: '*' });
-  await app.listen(3000);
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();
