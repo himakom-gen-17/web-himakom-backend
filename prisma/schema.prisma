@@ -33,10 +33,10 @@ model Users {
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
   refreshToken   String?
-  articles       Articles[]
-  courses        Courses[]
   formalPicture  String?
   profilePicture String?
+  articles       Articles[]
+  courses        Courses[]
   socials        Socials[]
   generasi       Generasi?  @relation(fields: [generasiName], references: [name])
 }
@@ -52,7 +52,7 @@ model Socials {
 model Category {
   id       Int        @id @default(autoincrement())
   name     String     @unique
-  articles Articles[]
+  articles Articles[] @relation("ArticlesToCategory")
 }
 
 model Articles {
@@ -68,7 +68,7 @@ model Articles {
   updatedAt  DateTime   @updatedAt
   divisi     Divisi?    @relation(fields: [divisiId], references: [id])
   user       Users?     @relation(fields: [userId], references: [id])
-  categories Category[]
+  categories Category[] @relation("ArticlesToCategory")
 }
 
 model Albums {
