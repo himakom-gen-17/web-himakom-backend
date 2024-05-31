@@ -57,6 +57,7 @@ export class ArticlesService {
           select: prismaExclude('Users', ['password', 'refreshToken']),
         },
         categories: true,
+        divisi: true,
       },
     });
   }
@@ -74,6 +75,7 @@ export class ArticlesService {
           select: prismaExclude('Users', ['password', 'refreshToken']),
         },
         categories: true,
+        divisi: true,
       },
     });
   }

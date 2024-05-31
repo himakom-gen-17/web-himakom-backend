@@ -35,11 +35,24 @@ export class UsersService {
 
   async findAll() {
     return await this.prisma.users.findMany({
-      select: prismaExclude('Users', ['password']),
       orderBy: {
         generasiName: {
           sort: 'desc',
         },
+      },
+      select: {
+        generasi: true,
+        articles: true,
+        id: true,
+        email: true,
+        role: true,
+        name: true,
+        generasiName: true,
+        kepengurusan: true,
+        createdAt: true,
+        updatedAt: true,
+        formalPicture: true,
+        profilePicture: true,
       },
     });
   }
@@ -49,7 +62,20 @@ export class UsersService {
       where: {
         id: id,
       },
-      select: prismaExclude('Users', ['password']),
+      select: {
+        generasi: true,
+        articles: true,
+        id: true,
+        email: true,
+        role: true,
+        name: true,
+        generasiName: true,
+        kepengurusan: true,
+        createdAt: true,
+        updatedAt: true,
+        formalPicture: true,
+        profilePicture: true,
+      },
     });
   }
 
@@ -72,6 +98,7 @@ export class UsersService {
         },
       });
       delete updatedUser.password;
+      delete updatedUser.refreshToken;
       return updatedUser;
     } catch (error) {
       throw error;
