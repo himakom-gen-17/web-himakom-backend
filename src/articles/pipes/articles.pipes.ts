@@ -49,3 +49,33 @@ export class ParseCategoriesPipe implements PipeTransform {
     return value;
   }
 }
+
+@Injectable()
+export class ConvertMultipleToWebpPipe implements PipeTransform {
+  async transform(files: {
+    [fieldname: string]: Express.Multer.File[];
+  }): Promise<{ [fieldname: string]: Express.Multer.File[] }> {
+    const supportedFormats = ['image/jpeg', 'image/png', 'image/tiff'];
+    for (const fieldname in files) {
+      const fileArray = files[fieldname];
+      for (let i = 0; i < fileArray.length; i++) {
+        const file = fileArray[i];
+        if (!file || !supportedFormats.includes(file.mimetype)) {
+          throw new BadRequestException('File format is not supported');
+        }
+        const buffer = await sharp(file.buffer)
+          .webp({ quality: 80 })
+          .toBuffer();
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        fileArray[i] = {
+          ...file,
+          buffer: buffer,
+          originalname:
+            uniqueSuffix + '-' + file.originalname.replace(/\..+$/, '.webp'),
+          mimetype: 'image/webp',
+        };
+      }
+    }
+    return files;
+  }
+}
