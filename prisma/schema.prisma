@@ -49,26 +49,26 @@ model Socials {
   user   Users?  @relation(fields: [userId], references: [id])
 }
 
-model Categories {
+model Category {
   id       Int        @id @default(autoincrement())
   name     String     @unique
   articles Articles[]
 }
 
 model Articles {
-  id         Int          @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   title      String
-  slug       String       @unique
+  slug       String     @unique
   thumbnail  String?
   content    String
-  published  Boolean      @default(false)
+  published  Boolean    @default(false)
   userId     String?
   divisiId   Int?
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  divisi     Divisi?      @relation(fields: [divisiId], references: [id])
-  user       Users?       @relation(fields: [userId], references: [id])
-  categories Categories[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  divisi     Divisi?    @relation(fields: [divisiId], references: [id])
+  user       Users?     @relation(fields: [userId], references: [id])
+  categories Category[]
 }
 
 model Albums {
