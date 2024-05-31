@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateGenerasiDto {
-  name: number;
+  name: number | string;
 
   visi: string;
 
