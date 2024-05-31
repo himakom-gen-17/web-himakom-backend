@@ -16,6 +16,13 @@ export class AuthController {
   signin(@Body() authDto: AuthDto) {
     return this.authService.signin(authDto);
   }
+
+  @Get('me')
+  @UseGuards(AccessTokenGuard)
+  me(@GetUser() user: Users) {
+    return user;
+  }
+
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   signout(@GetUser() user: Users) {
