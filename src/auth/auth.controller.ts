@@ -8,10 +8,7 @@ import { Users } from '@prisma/client';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Post('signup')
-  signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signup(createUserDto);
-  }
+
   @Post('login')
   signin(@Body() authDto: AuthDto) {
     return this.authService.signin(authDto);

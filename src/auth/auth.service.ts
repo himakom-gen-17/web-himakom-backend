@@ -18,32 +18,6 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signup(createUserDto: CreateUserDto) {
-    const hash = await this.hashData(createUserDto.password);
-    try {
-      const userExist = await this.prisma.users.findUnique({
-        where: {
-          email: createUserDto.email,
-        },
-      });
-
-      if (userExist) {
-        throw new BadRequestException('Email telah digunakan');
-      }
-
-      const user = await this.prisma.users.create({
-        data: {
-          ...createUserDto,
-          password: hash,
-        },
-      });
-      delete user.password;
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async signin(authDto: AuthDto) {
     try {
       const user = await this.prisma.users.findUnique({
