@@ -12,7 +12,11 @@ export class CreateUserDto {
   @IsString()
   name: string;
 
-  generasiName: number;
+  generasiName: number | string;
+
+  profilePicture: string;
+
+  formalPicture: string;
 
   @IsEnum(Role)
   role: Role;
