@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Divisi {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  articles    Articles[]
+}
+
+model Generasi {
+  name  Int     @id
+  visi  String?
+  misi  String?
+  image String?
+  user  Users[]
+}
+
+model Users {
+  id             String     @id @default(uuid())
+  email          String     @unique
+  password       String
+  role           Role       @default(Anggota)
+  name           String
+  generasiName   Int?
+  kepengurusan   String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  refreshToken   String?
+  formalPicture  String?
+  profilePicture String?
+  articles       Articles[]
+  courses        Courses[]
+  socials        Socials[]
+  generasi       Generasi?  @relation(fields: [generasiName], references: [name])
+}
+
+model Socials {
+  id     Int     @id @default(autoincrement())
+  type   String
+  link   String
+  userId String?
+  user   Users?  @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  articles Articles[] @relation("ArticlesToCategory")
+}
+
+model Articles {
+  id         Int        @id @default(autoincrement())
+  title      String
+  slug       String     @unique
+  thumbnail  String?
+  content    String
+  published  Boolean    @default(false)
+  userId     String?
+  divisiId   Int?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  divisi     Divisi?    @relation(fields: [divisiId], references: [id])
+  user       Users?     @relation(fields: [userId], references: [id])
+  categories Category[] @relation("ArticlesToCategory")
+}
+
+model Albums {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  image       Images[]
+}
+
+model Images {
+  id        Int      @id @default(autoincrement())
+  path      String
+  albumId   Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  album     Albums?  @relation(fields: [albumId], references: [id])
+}
+
+model Courses {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  image       String
+  userId      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        Users?     @relation(fields: [userId], references: [id])
+  episodes    Episodes[]
+}
+
+model Episodes {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  mediaLink   String?
+  courseId    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  course      Courses? @relation(fields: [courseId], references: [id])
+}
+
+enum Role {
+  Anggota
+  Pengajar
+  Admin
+}
